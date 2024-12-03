@@ -1,17 +1,21 @@
-name: Hello World Workflow
+name: Pull Request Hello World
 
 on:
-  push:
+  pull_request:
     branches:
-      - feature_1  # Trigger workflow on push to the main branch
+      - dev  # Target branch for the pull request
+    paths-ignore:
+      - 'docs/**'  # Optional: Ignore specific paths
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   say-hello:
+    if: github.base_ref == 'dev' && github.head_ref == 'feature_1'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3  # Checkout the repository code
-
       - name: Echo Hello World
         run: echo "Hello, World!"
