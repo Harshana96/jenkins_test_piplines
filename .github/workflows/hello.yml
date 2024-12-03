@@ -1,0 +1,33 @@
+name: Pull Request Update README
+
+on:
+  pull_request:
+    branches:
+      - dev  # Target branch for the pull request
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  update-readme:
+    if: github.base_ref == 'dev' && github.head_ref == 'feature_1'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Feature Branch
+        uses: actions/checkout@v3
+        with:
+          ref: feature_1  # Checkout the source branch of the PR
+
+      - name: Update README.md
+        run: echo "Hello Harshana" >> README.md
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update README.md with 'Hello Harshana'"
+          git push origin feature_1
+
